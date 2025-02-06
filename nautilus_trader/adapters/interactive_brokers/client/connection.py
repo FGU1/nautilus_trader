@@ -15,12 +15,13 @@
 
 import asyncio
 import functools
+import time
 
 from ibapi import comm
 from ibapi import decoder
 from ibapi.client import EClient
-from ibapi.common import NO_VALID_ID
 from ibapi.connection import Connection
+from ibapi.const import NO_VALID_ID
 from ibapi.errors import CONNECT_FAIL
 from ibapi.server_versions import MAX_CLIENT_VER
 from ibapi.server_versions import MIN_CLIENT_VER
@@ -72,7 +73,12 @@ class InteractiveBrokersClientConnectionMixin(BaseMixin):
         except Exception as e:
             self._log.error(f"Connection failed: {e}")
             if self._eclient.wrapper:
-                self._eclient.wrapper.error(NO_VALID_ID, CONNECT_FAIL.code(), CONNECT_FAIL.msg())
+                self._eclient.wrapper.error(
+                    NO_VALID_ID,
+                    time.time_ns() // 1_000_000,
+                    CONNECT_FAIL.code(),
+                    CONNECT_FAIL.msg(),
+                )
             await self._handle_reconnect()
 
     async def _disconnect(self) -> None:
@@ -133,8 +139,8 @@ class InteractiveBrokersClientConnectionMixin(BaseMixin):
         """
         v100prefix = "API\0"
         v100version = f"v{MIN_CLIENT_VER}..{MAX_CLIENT_VER}"
-        if self._eclient.connectionOptions:
-            v100version += f" {self._eclient.connectionOptions}"
+        if self._eclient.connectOptions:
+            v100version += f" {self._eclient.connectOptions}"
         msg = comm.make_msg(v100version)
         msg2 = str.encode(v100prefix, "ascii") + msg
         await asyncio.to_thread(functools.partial(self._eclient.conn.sendMsg, msg2))

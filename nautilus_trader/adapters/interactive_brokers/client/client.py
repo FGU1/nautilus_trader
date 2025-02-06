@@ -23,10 +23,10 @@ from typing import Any
 
 from ibapi import comm
 from ibapi.client import EClient
-from ibapi.commission_report import CommissionReport
-from ibapi.common import MAX_MSG_LEN
-from ibapi.common import NO_VALID_ID
+from ibapi.commission_and_fees_report import CommissionAndFeesReport
 from ibapi.common import BarData
+from ibapi.const import MAX_MSG_LEN
+from ibapi.const import NO_VALID_ID
 from ibapi.errors import BAD_LENGTH
 from ibapi.execution import Execution
 from ibapi.utils import current_fn_name
@@ -145,7 +145,7 @@ class InteractiveBrokersClient(
         # OrderMixin
         self._exec_id_details: dict[
             str,
-            dict[str, Execution | (CommissionReport | str)],
+            dict[str, Execution | (CommissionAndFeesReport | str)],
         ] = {}
         self._order_id_to_order_ref: dict[int, AccountOrderRef] = {}
         self._next_valid_order_id: int = -1

@@ -63,7 +63,7 @@ uvloop = {version = "^0.21.0", markers = "sys_platform != 'win32'"}
 betfair_parser = {version = "==0.14.2", optional = true}  # Pinned for stability
 defusedxml = {version = "^0.7.1", optional = true}
 docker = {version = "^7.1.0", optional = true}
-nautilus_ibapi = {version = "==10.19.4", optional = true}  # Pinned for stability
+#nautilus_ibapi = {version = "==10.19.4", optional = true}  # Pinned for stability
 v4-proto = {version = "==7.0.5", optional = true}  # Pinned due breaking protobuf issue
 grpcio = {version = "==1.68.1", optional = true}  # Pinned due breaking protobuf issue
 protobuf = {version = "==5.29.1", optional = true}  # Pinned due breaking protobuf issue
@@ -77,7 +77,8 @@ py-clob-client = {version = "^0.20.0", optional = true}
 betfair = ["betfair_parser"]
 docker = ["docker"]
 dydx = ["v4-proto", "bech32", "ecdsa", "bip-utils", "pycryptodome", "grpcio", "protobuf"]
-ib = ["nautilus_ibapi", "defusedxml"]
+#ib = ["nautilus_ibapi", "defusedxml"]
+ib = ["defusedxml"]
 polymarket = ["py-clob-client"]
 
 [tool.poetry.group.dev]

@@ -75,6 +75,7 @@ class InteractiveBrokersClientErrorMixin(BaseMixin):
         error_code: int,
         error_string: str,
         advanced_order_reject_json: str = "",
+        error_time: int = 0,
     ) -> None:
         """
         Process an error based on its code, request ID, and message. Depending on the
@@ -91,6 +92,8 @@ class InteractiveBrokersClientErrorMixin(BaseMixin):
             The error message string.
         advanced_order_reject_json : str
             The JSON string for advanced order rejection.
+        error_time: int. The Unix timestamp of when the error took place.
+            Note: This is only implemented for TWS API 10.33+
 
         """
         is_warning = error_code in self.WARNING_CODES or 2100 <= error_code < 2200

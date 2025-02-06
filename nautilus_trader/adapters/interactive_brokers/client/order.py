@@ -15,10 +15,11 @@
 
 from decimal import Decimal
 
-from ibapi.commission_report import CommissionReport
+from ibapi.commission_and_fees_report import CommissionAndFeesReport
 from ibapi.contract import Contract
 from ibapi.execution import Execution
 from ibapi.order import Order as IBOrder
+from ibapi.order_cancel import OrderCancel
 from ibapi.order_state import OrderState as IBOrderState
 
 from nautilus_trader.adapters.interactive_brokers.client.common import AccountOrderRef
@@ -70,7 +71,7 @@ class InteractiveBrokersClientOrderMixin(BaseMixin):
             order.orderRef = f"{order.orderRef}:{order.orderId}"
             self._eclient.placeOrder(order.orderId, order.contract, order)
 
-    def cancel_order(self, order_id: int, manual_cancel_order_time: str = "") -> None:
+    def cancel_order(self, order_id: int, order_cancel: OrderCancel) -> None:
         """
         Cancel an order through the EClient.
 
@@ -78,11 +79,15 @@ class InteractiveBrokersClientOrderMixin(BaseMixin):
         ----------
         order_id : int
             The unique identifier for the order to be canceled.
-        manual_cancel_order_time : str, optional
-            The timestamp indicating when the order was canceled manually.
+        order_cancel : object, optional
+            An OrderCancel object that can receive the manualOrderCancelTime,
+            manualOrderIndicator, and extOperator fields.
+            See OrderCancel Reference :
+            https://www.interactivebrokers.com/campus/ibkr-api-page/twsapi-ref/#ordercancel-ref
+            for more insight on the OrderCancel class.
 
         """
-        self._eclient.cancelOrder(order_id, manual_cancel_order_time)
+        self._eclient.cancelOrder(order_id, order_cancel)
 
     def cancel_all_orders(self) -> None:
         """
@@ -266,7 +271,7 @@ class InteractiveBrokersClientOrderMixin(BaseMixin):
     async def process_commission_report(
         self,
         *,
-        commission_report: CommissionReport,
+        commission_report: CommissionAndFeesReport,
     ) -> None:
         """
         Provide the CommissionReport of an Execution.

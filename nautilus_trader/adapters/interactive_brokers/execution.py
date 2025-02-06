@@ -19,11 +19,12 @@ from decimal import Decimal
 from typing import Any
 
 import pandas as pd
-from ibapi.commission_report import CommissionReport
-from ibapi.common import UNSET_DECIMAL
-from ibapi.common import UNSET_DOUBLE
+from ibapi.commission_and_fees_report import CommissionAndFeesReport
+from ibapi.const import UNSET_DECIMAL
+from ibapi.const import UNSET_DOUBLE
 from ibapi.execution import Execution
 from ibapi.order import Order as IBOrder
+from ibapi.order_cancel import OrderCancel
 from ibapi.order_state import OrderState as IBOrderState
 
 # fmt: off
@@ -690,7 +691,7 @@ class InteractiveBrokersExecutionClient(LiveExecutionClient):
 
         venue_order_id = command.venue_order_id
         if venue_order_id:
-            self._client.cancel_order(int(venue_order_id.value))
+            self._client.cancel_order(int(venue_order_id.value), OrderCancel())
         else:
             self._log.error(f"VenueOrderId not found for {command.client_order_id}")
 
@@ -700,7 +701,7 @@ class InteractiveBrokersExecutionClient(LiveExecutionClient):
         ):
             venue_order_id = order.venue_order_id
             if venue_order_id:
-                self._client.cancel_order(int(venue_order_id.value))
+                self._client.cancel_order(int(venue_order_id.value), OrderCancel())
             else:
                 self._log.error(f"VenueOrderId not found for {order.client_order_id}")
 
@@ -917,7 +918,7 @@ class InteractiveBrokersExecutionClient(LiveExecutionClient):
         self,
         order_ref: str,
         execution: Execution,
-        commission_report: CommissionReport,
+        commission_report: CommissionAndFeesReport,
     ) -> None:
         if not execution.orderRef:
             self._log.warning(f"ClientOrderId not available, order={execution.__dict__}")
@@ -942,7 +943,7 @@ class InteractiveBrokersExecutionClient(LiveExecutionClient):
                 last_px=Price(execution.price, precision=instrument.price_precision),
                 quote_currency=instrument.quote_currency,
                 commission=Money(
-                    commission_report.commission,
+                    commission_report.commissionAndFees,
                     Currency.from_str(commission_report.currency),
                 ),
                 liquidity_side=LiquiditySide.NO_LIQUIDITY_SIDE,
