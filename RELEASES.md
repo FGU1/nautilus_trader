@@ -16,6 +16,7 @@ Released on TBD (UTC).
 - Added `use_mark_prices`, `use_mark_xrates` and `convert_to_account_base_currency` options for `PortfolioConfig`
 - Added mark price calculations and xrate handling for `Portfolio`
 - Added Rust debugging support and refined cargo nextest usage (#2335, #2339), thanks @faysou
+- Added catalog write mode options (#2365), thanks @faysou
 
 ### Breaking Changes
 - Removed [talib](https://github.com/nautechsystems/nautilus_trader/tree/develop/nautilus_trader/indicators/ta_lib) subpackage (see deprecations for v1.211.0)
@@ -57,6 +58,7 @@ Released on TBD (UTC).
 - Ported market-if-touched order handling for `OrderMatchingEngine` in Rust (#2329), thanks @filipmacek
 - Ported limit-if-touched order handling for `OrderMatchingEngine` in Rust (#2333), thanks @filipmacek
 - Ported market-to-limit order handling for `OrderMatchingEngine` in Rust (#2354), thanks @filipmacek
+- Ported trailing stop order handling for `OrderMatchingEngine` in Rust (#2366), thanks @filipmacek
 - Updated Databento `publishers.json` mappings file(s)
 - Upgraded Rust to 1.85.0 and 2024 edition
 - Upgraded `datafusion` crate to v45.0.0
@@ -78,6 +80,7 @@ Released on TBD (UTC).
 - Fixed sub command issue in some adapters (#2343), thanks @faysou
 - Fixed `bypass_logging` fixture to keep log guard alive for entire test session
 - Fixed time parsing for IB adapter (#2360), thanks @faysou
+- Fixed bad `ts_init` value in IB weekly and monthly bar (#2355), thanks @Endura2024
 
 ### Documentation Updates
 - Added backtest clock and timers example (#2327), thanks @stefansimik
